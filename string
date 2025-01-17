@@ -3,7 +3,7 @@
 int main(){
 char s[50],i;
 printf("enter a string:");
-gets(s);
+scanf("%[^\n]",s);
 for(i=0;*(s+i)!='\0';i++);
 printf("\nlength of=%d",i);
 return 0;
