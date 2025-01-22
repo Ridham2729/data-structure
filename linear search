@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main() {
+    int n, i, found = 0;
+    int numbers[] = {10, 20, 30, 40, 50, 60, 70};  
+
+    
+    printf("Enter a number to search: ");
+    scanf("%d", &n);
+
+    
+    for (i = 0; i < 7; i++) {
+        if (numbers[i] == n) {
+            found = 1;  
+            break;      
+        }
+    }
+
+    
+    if (found) {
+        printf("The number %d was found in the array.\n", n);
+    } else {
+        printf("The number %d was not found in the array.\n", n);
+    }
+
+    return 0;
+}
