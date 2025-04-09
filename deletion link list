@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL; 
+
+
+void printList(struct Node* n) {
+    while (n != NULL) {
+        printf(" %d ", n->data);
+        n = n->next;
+    }
+    printf("\n"); 
+}
+
+void deletefirst() {
+    if (head == NULL) {
+        return; 
+    }
+    struct Node* temp = head;
+    head = head->next;
+    free(temp); 
+}
+
+void deletelast() {
+    if (head == NULL) {
+        return; 
+    }
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    struct Node* temp = head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    free(temp->next); 
+    temp->next = NULL;
+}
+
+void deletemiddle(int pos) {
+    if (head == NULL || pos <= 0) {
+        return; 
+    }
+    if (pos == 1) {
+        deletefirst();
+        return;
+    }
+    struct Node* current = head;
+    struct Node* prev = NULL;
+    int count = 1;
+
+    while (current != NULL && count < pos) {
+        prev = current;
+        current = current->next;
+        count++;
+    }
+
+    if (current == NULL) {
+        return; // Position is out of bounds
+    }
+
+    prev->next = current->next;
+    free(current); 
+}
+
+int main() {
+    
+    head = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* second = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* third = (struct Node*)malloc(sizeof(struct Node));
+
+    if (head == NULL || second == NULL || third == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1; 
+    }
+
+    head->data = 1;
+    head->next = second;
+
+    second->data = 2;
+    second->next = third;
+
+    third->data = 3;
+    third->next = NULL;
+
+    printf("Original List:");
+    printList(head);
+
+    printf("Deleting first node...\n");
+    deletefirst();
+    printf("List after deleting first:");
+    printList(head);
+
+    printf("Deleting last node...\n");
+    deletelast();
+    printf("List after deleting last:");
+    printList(head);
+
+    // Re-create a list with more elements to test deletemiddle
+    head = (struct Node*)malloc(sizeof(struct Node));
+    second = (struct Node*)malloc(sizeof(struct Node));
+    third = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* fourth = (struct Node*)malloc(sizeof(struct Node));
+
+    if (head == NULL || second == NULL || third == NULL || fourth == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1; // Indicate an error
+    }
+
+    head->data = 10;
+    head->next = second;
+
+    second->data = 20;
+    second->next = third;
+
+    third->data = 30;
+    third->next = fourth;
+
+    fourth->data = 40;
+    fourth->next = NULL;
+
+    printf("\nNew List:");
+    printList(head);
+
+    int positionToDelete = 3;
+    printf("Deleting node at position %d...\n", positionToDelete);
+    deletemiddle(positionToDelete);
+    printf("List after deleting middle (at position %d):", positionToDelete);
+    printList(head);
+
+    // Free the remaining memory to avoid memory leaks
+    struct Node* current = head;
+    while (current != NULL) {
+        struct Node* next = current->next;
+        free(current);
+        current = next;
+    }
+    head = NULL; // Reset head to NULL
+
+    return 0;
+}
